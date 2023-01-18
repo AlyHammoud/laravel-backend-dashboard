@@ -99,10 +99,18 @@ class ItemsController extends Controller
 
     public function getItemsNames()
     {
+        $categoryIds = request()->query('categoryIds', '');
+
         $names = DB::table('item_translations')
             ->join('items', 'items.id', 'item_translations.item_id')
-            ->select('items.id', 'item_translations.name')
-            ->get();
+            ->select('items.id', 'item_translations.name');
+
+        if ($categoryIds) {
+            $categoryIds = explode(',', $categoryIds);
+            $names->whereIn('items.category_id', $categoryIds);
+        }
+
+        $names = $names->get();
 
         return $names;
     }

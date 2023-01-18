@@ -118,6 +118,7 @@ Route::get('products/client/{item_id}', [ProductsController::class, 'productsByI
 
 Route::get('product/{product}', [ProductsController::class, 'show'])->name('product.singleproduct'); //for dashboard
 Route::get('product/client/{product}', [ProductsController::class, 'showOneForClients']); // for clients
+Route::get('product-sales', [ProductsController::class, 'getSales']); // for clients
 //
 // End Products
 //

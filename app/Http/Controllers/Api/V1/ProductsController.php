@@ -7,6 +7,7 @@ use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Http\Resources\V1\ProductResource;
 use App\Models\Product;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
 
@@ -19,16 +20,19 @@ class ProductsController extends Controller
      */
     public function index()
     {
-        return ProductResource::collection(Product::with('productImages', 'item',)->paginate(20));
+        return ProductResource::collection(Product::with('productImages', 'item',)->paginate(2));
     }
 
     public function filteredProducts($categoryIds = null, $itemIds = null)
     {
         $prices = request()->query('prices', '');
+        $sales = request()->query('sales', '');
+        $search =  request()->query('search', '');
+
         $query = Product::orderBy('created_at', 'asc')
             ->with('productImages', 'item');
 
-        if ($categoryIds != 'no-cat') {
+        if ($categoryIds != 'no-cat' && $categoryIds) {
             $categoryIds = explode(',', $categoryIds);
             $query = $query->whereHas(
                 'item',
@@ -38,7 +42,7 @@ class ProductsController extends Controller
             );
         }
 
-        if ($itemIds != 'no-item') {
+        if ($itemIds != 'no-item' && $itemIds) {
             $itemIds = explode(',', $itemIds);
             $query = $query->whereIn('item_id', $itemIds);
         }
@@ -48,7 +52,27 @@ class ProductsController extends Controller
             $query = $query->whereBetween('price', [(int)$prices[0], (int)$prices[1]]);
         }
 
-        return ProductResource::collection($query->paginate(20));
+        if ($sales != '') {
+            $sales = explode(',', $sales);
+            $query = $query->whereHas('productInfos', function ($query) use ($sales) {
+                return $query->whereIn('sale', $sales);
+            });
+        }
+
+        if ($search) {
+            $query = $query->whereTranslationLike('name', '%' . $search . '%');
+        }
+
+        return ProductResource::collection($query->paginate(2));
+    }
+
+    public function getSales()
+    {
+        return DB::table('product_infos')
+            ->select('sale')
+            ->distinct()
+            ->orderBy('sale', 'asc')
+            ->get();
     }
 
     public function productsByItem($item_id)
@@ -225,8 +249,8 @@ class ProductsController extends Controller
         //first update data in products table and translations then images down
         //
         $product->update([
-            $data['price'],
-            $data['is_available'],
+            'price' => $data['price'],
+            'is_available' => $data['is_available'],
             ...$name_desc_translation,
         ]);
 
