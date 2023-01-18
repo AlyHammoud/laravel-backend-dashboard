@@ -48,6 +48,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::put('/item/{item}', [ItemsController::class, 'update']);
     Route::delete('/item/{item}', [ItemsController::class, 'destroy']);
     Route::delete('deleteAllItems', [ItemsController::class, 'deleteAllItems']); //all categories and relations
+    Route::get('items', [ItemsController::class, 'index'])->name('item.allItems'); // for admin with all translations and all infos
+    Route::get('filtered-items/{categoryId?}', [ItemsController::class, 'filteredItems'])->name('item.allFilteredItems'); // for admin with all translations and all infos
+
     //
     // End Items
     //
@@ -58,6 +61,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::post('/product', [ProductsController::class, 'store']);
     Route::put('/product/{product}', [ProductsController::class, 'update']);
     Route::delete('/product/{product}', [ProductsController::class, 'destroy']);
+    Route::get('products', [ProductsController::class, 'index'])->name('product.allProducts');
+    Route::get('products/{item_id}', [ProductsController::class, 'productsByItem'])->name('product.allProductsByItem');
+    Route::get('filtered-products/{categoryIds?}/{itemIds?}', [ProductsController::class, 'filteredproducts'])->name('product.allFilteredProducts'); // for admin with all translations and all infos
     //
     // End Products
     //
@@ -92,8 +98,8 @@ Route::get('category/client/{category}', [CategoriesController::class, 'showOneF
 // Items
 //
 //managed by ItemResource using when:
-Route::get('items', [ItemsController::class, 'index'])->name('item.allItems'); // for admin with all translations and all infos
-Route::get('filtered-items/{categoryId?}', [ItemsController::class, 'filteredItems'])->name('item.allFilteredItems'); // for admin with all translations and all infos
+// Route::get('items', [ItemsController::class, 'index'])->name('item.allItems'); // for admin with all translations and all infos
+// Route::get('filtered-items/{categoryId?}', [ItemsController::class, 'filteredItems'])->name('item.allFilteredItems'); // for admin with all translations and all infos
 Route::get('items/allAvailable', [ItemsController::class, 'allAvailable']); //for clients show - specific info
 Route::get('items/{category_id}', [ItemsController::class, 'itemsByCategory'])->name('item.allItemsByCategory');
 Route::get('items/client/{category_id}', [ItemsController::class, 'itemsByCategoryforClient']);
@@ -110,9 +116,9 @@ Route::get('itemsNames', [ItemsController::class, 'getItemsNames']); // for clie
 // Products
 //
 //managed by ItemResource using when:
-Route::get('products', [ProductsController::class, 'index'])->name('product.allProducts');
-Route::get('filtered-products/{categoryIds?}/{itemIds?}', [ProductsController::class, 'filteredproducts'])->name('product.allFilteredProducts'); // for admin with all translations and all infos
-Route::get('products/{item_id}', [ProductsController::class, 'productsByItem'])->name('product.allProductsByItem');
+// Route::get('products', [ProductsController::class, 'index'])->name('product.allProducts');
+// Route::get('filtered-products/{categoryIds?}/{itemIds?}', [ProductsController::class, 'filteredproducts'])->name('product.allFilteredProducts'); // for admin with all translations and all infos
+// Route::get('products/{item_id}', [ProductsController::class, 'productsByItem'])->name('product.allProductsByItem');
 Route::get('products/allAvailable', [ProductsController::class, 'allAvailable']); //for clients show
 Route::get('products/client/{item_id}', [ProductsController::class, 'productsByItemforClient']);
 
