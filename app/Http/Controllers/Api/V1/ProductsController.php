@@ -20,7 +20,7 @@ class ProductsController extends Controller
      */
     public function index()
     {
-        return ProductResource::collection(Product::with('productImages', 'item',)->paginate(2));
+        return ProductResource::collection(Product::with('productImages', 'item',)->paginate(20));
     }
 
     public function filteredProducts($categoryIds = null, $itemIds = null)
@@ -63,7 +63,7 @@ class ProductsController extends Controller
             $query = $query->whereTranslationLike('name', '%' . $search . '%');
         }
 
-        return ProductResource::collection($query->paginate(2));
+        return ProductResource::collection($query->paginate(20));
     }
 
     public function getSales()
