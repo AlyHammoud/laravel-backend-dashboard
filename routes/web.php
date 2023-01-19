@@ -13,3 +13,7 @@ Route::get('/logout', function () {
     return view('logout');
 })->middleware('auth');
 Route::post('/log-logout', [AuthController::class, 'logsLogout']);
+
+Route::get('/email-verified', function () {
+    return view('email_verified');
+});

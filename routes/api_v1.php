@@ -9,18 +9,17 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Resources\V1\UserResource;
 
+use App\Http\Controllers\Api\V1\VerifyEmailController;
+
+Route::get('/email/verify/{id}/{hash}', [VerifyEmailController::class, '__invoke'])
+    ->middleware(['signed', 'throttle:6,1'])
+    ->name('verification.verify');
+
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     //
     // Routes for Users and Authentication
     //
-    Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-        $request->fulfill();
-
-        return response('verified');
-    })->middleware(['signed'])->name('verification.verify')->withoutMiddleware('verified');
-
-
     Route::put('/update/user/{user}', [AuthController::class, 'update']);
     Route::delete('/delete/{user}', [AuthController::class, 'destroy']);
     Route::post('/logout', [AuthController::class, 'logout'])->withoutMiddleware('verified');

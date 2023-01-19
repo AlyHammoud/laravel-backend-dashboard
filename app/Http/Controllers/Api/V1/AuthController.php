@@ -66,7 +66,7 @@ class AuthController extends Controller
         $user = Auth::user();
 
         if ($user->email_verified_at == null) {
-            abort(403, 'Forbidden');
+            abort(403, 'Email not verified');
         }
 
         /**
