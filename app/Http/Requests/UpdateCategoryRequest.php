@@ -38,10 +38,10 @@ class UpdateCategoryRequest extends FormRequest
         ];
     }
 
-public function messages()
+    public function messages()
     {
         return [
-            "name_translation.*" => "Name field is required"
+            "name_translation.en" => "Name field is required"
         ];
     }
 }

@@ -35,4 +35,11 @@ class StoreItemRequest extends FormRequest
             'images.*' => 'nullable|image'
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'name_translation.en' => 'Name is required'
+        ];
+    }
 }

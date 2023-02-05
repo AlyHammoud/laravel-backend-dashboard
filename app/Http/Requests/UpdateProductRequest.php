@@ -29,7 +29,7 @@ class UpdateProductRequest extends FormRequest
     {
         return [
             'name_translation' => "sometimes|required|array|min:1",
-            'name_translation.*' => "distinct",
+            'name_translation.*' => "distinct|required",
             'description_translation' => "sometimes|required|array|min:1",
             'description_translation.*' => "distinct",
             'price' => 'nullable|numeric|min:0.1',
@@ -45,6 +45,13 @@ class UpdateProductRequest extends FormRequest
             'color' => 'sometimes|nullable|array',
             'size' => 'sometimes|nullable|array'
 
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'name_translation.en' => 'Name is required'
         ];
     }
 }

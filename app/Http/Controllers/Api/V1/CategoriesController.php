@@ -26,6 +26,8 @@ class CategoriesController extends Controller
         if (!$search) {
             $categories = Category::orderBy('created_at', 'desc')->paginate(15);
 
+            $categories[0]->visit()->withIp();
+
             return CategoryResource::collection($categories);
         }
         $categories = Category::orderBy('created_at', 'desc')

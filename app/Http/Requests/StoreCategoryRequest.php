@@ -36,7 +36,7 @@ class StoreCategoryRequest extends FormRequest
     public function messages()
     {
         return [
-            'name_translation.*' => 'Name is required'
+            'name_translation.en' => 'Name is required'
         ];
     }
 }

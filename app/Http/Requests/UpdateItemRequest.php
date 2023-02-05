@@ -29,15 +29,22 @@ class UpdateItemRequest extends FormRequest
     {
         return [
             'name_translation' => "sometimes|required|array|min:1",
-            'name_translation.*' => "distinct",
+            'name_translation.*' => "distinct|required",
             'description_translation' => "sometimes|required|array|min:1",
             'description_translation.*' => "distinct",
-            'price' => 'nullable|numeric|min:1',
+            'price' => 'nullable|numeric|min:0',
             'is_available' => 'sometimes|required|boolean|max:1',
             'category_id' => 'sometimes|required|exists:categories,id',
             'images' => 'sometimes|nullable|array',
             'images.*' => 'nullable|image',
             'deleted_images' => 'sometimes|nullable|array',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'name_translation.en' => 'Name is required'
         ];
     }
 }

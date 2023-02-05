@@ -40,4 +40,11 @@ class StoreProductRequest extends FormRequest
             'color' => 'nullable|array'
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'name_translation.en' => 'Name is required'
+        ];
+    }
 }
