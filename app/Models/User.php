@@ -25,7 +25,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'username',
         'password',
         'role_id',
-        'image'
+        'image',
+	'mobile'
     ];
 
     protected $with = ['role'];

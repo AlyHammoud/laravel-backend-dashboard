@@ -34,7 +34,8 @@ class UpdateUserRequest extends FormRequest
             'username' => "sometimes|required|unique:users,username,{$this->user->id},id|string",
             'password' => 'sometimes|min:3|max:18|confirmed',
             'role_id' => 'sometimes|exists:roles,id',
-            'image' => 'sometimes|nullable|image'
+            'image' => 'sometimes|nullable|image',
+            'mobile' => 'sometimes|nullable'
         ];
     }
 }
