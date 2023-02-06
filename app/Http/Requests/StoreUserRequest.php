@@ -31,6 +31,7 @@ class StoreUserRequest extends FormRequest
             'role_id' => 'required|max:2',
             'image' => 'sometimes|nullable|image',
             'mobile' => 'sometimes|nullable'
+
         ];
     }
 

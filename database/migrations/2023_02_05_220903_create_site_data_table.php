@@ -13,11 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create('site_data', function (Blueprint $table) {
             $table->id();
-            $table->boolean('is_available')->default('1');
-            $table->float('price')->nullable();
-            $table->foreignId('item_id')->constrained()->onDelete('cascade');
+            $table->integer('site_visits');
             $table->timestamps();
         });
     }
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('products');
+        Schema::dropIfExists('site_data');
     }
 };

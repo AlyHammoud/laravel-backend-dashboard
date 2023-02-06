@@ -36,6 +36,7 @@ class UpdateUserRequest extends FormRequest
             'role_id' => 'sometimes|exists:roles,id',
             'image' => 'sometimes|nullable|image',
             'mobile' => 'sometimes|nullable'
+
         ];
     }
 }
