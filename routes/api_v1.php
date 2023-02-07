@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\CategoriesController;
 use App\Http\Controllers\Api\V1\ItemsController;
 use App\Http\Controllers\Api\V1\ProductsController;
+use App\Http\Controllers\Api\V1\SiteDataController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -29,6 +30,14 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     });
     //
     //End of Routes for Users and Authentication
+    //
+
+    //
+    //Site Data
+    //
+    Route::get('/getAllSiteData', [SiteDataController::class, 'getAllSiteData']);
+    //
+    //Site Data
     //
 
     //
@@ -67,6 +76,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     // End Products
     //
 });
+
+Route::get('/siteData', [SiteDataController::class, 'index']);
 
 //
 // Auth
