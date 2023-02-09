@@ -35,8 +35,7 @@ class UpdateUserRequest extends FormRequest
             'password' => 'sometimes|min:3|max:18|confirmed',
             'role_id' => 'sometimes|exists:roles,id',
             'image' => 'sometimes|nullable|image',
-            'mobile' => 'sometimes|nullable'
-
+            'mobile' => 'sometimes|nullable|unique:users,mobile'
         ];
     }
 }

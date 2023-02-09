@@ -30,7 +30,7 @@ class StoreUserRequest extends FormRequest
             'password' => 'required|min:3|max:18|confirmed',
             'role_id' => 'required|max:2',
             'image' => 'sometimes|nullable|image',
-            'mobile' => 'sometimes|nullable'
+            'mobile' => 'sometimes|nullable|unique:users,mobile'
 
         ];
     }
