@@ -24,7 +24,7 @@ class CategoriesController extends Controller
         $search = Request::query('search', '');
 
         if (!$search) {
-            $categories = Category::orderBy('created_at', 'desc')->paginate(15);
+            $categories = Category::orderBy('created_at', 'desc')->paginate(20);
 
             return CategoryResource::collection($categories);
         }

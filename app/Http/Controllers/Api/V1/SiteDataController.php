@@ -15,8 +15,8 @@ class SiteDataController extends Controller
     public function index()
     {
         $site_data = SiteData::get();
-        $site_data[0]->visit()->hourlyIntervals()->withIp();
-        // $site_data[0]->visit()->customInterval(Carbon::now()->addMinute(1))->withIp();
+        //$site_data[0]->visit()->hourlyIntervals()->withIp();
+	$site_data[0]->visit()->customInterval(Carbon::now()->subSeconds(300))->withIp();
     }
 
     public function getAllSiteData()

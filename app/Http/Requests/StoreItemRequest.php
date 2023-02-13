@@ -40,7 +40,7 @@ class StoreItemRequest extends FormRequest
     {
         return [
             'name_translation.en' => 'Name is required',
-            'images.0' => "Error, check your images"
+            'images.0' => "image field only accepts images"
         ];
     }
 }

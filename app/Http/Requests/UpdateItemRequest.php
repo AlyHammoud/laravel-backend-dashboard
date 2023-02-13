@@ -44,7 +44,8 @@ class UpdateItemRequest extends FormRequest
     public function messages()
     {
         return [
-            'name_translation.en' => 'Name is required'
+            'name_translation.en' => 'Name is required',
+            'images.0' => 'image field only accepts images'
         ];
     }
 }

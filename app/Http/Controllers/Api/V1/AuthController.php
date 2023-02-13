@@ -60,7 +60,7 @@ class AuthController extends Controller
         ]);
 
         if (!Auth::attempt($request->all())) {
-            return response(['error' => 'error login try again'], 422);
+            abort(403, 'invalid credentials!');
         }
 
         $user = Auth::user();
@@ -108,6 +108,13 @@ class AuthController extends Controller
             $tmpUpdateImage = rand() . '_user_' . time() . '.' . $validatedUpdatedUser['image']->extension();
             $validatedUpdatedUser['image']->move(storage_path('app/public/users_image'), $tmpUpdateImage);
 
+            if (File::exists(storage_path('app/public/users_image/' . $user->image))) {
+                File::delete(storage_path('app/public/users_image/' . $user->image));
+            }
+            $validatedUpdatedUser['image'] = $tmpUpdateImage;
+        }
+
+        if ($validatedUpdatedUser['deleteImage']) {
             if (File::exists(storage_path('app/public/users_image/' . $user->image))) {
                 File::delete(storage_path('app/public/users_image/' . $user->image));
             }

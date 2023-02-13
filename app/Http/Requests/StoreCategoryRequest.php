@@ -36,7 +36,8 @@ class StoreCategoryRequest extends FormRequest
     public function messages()
     {
         return [
-            'name_translation.en' => 'Name is required'
+            'name_translation.en' => 'Name is required',
+            'image_url' => 'image is required and should have valid type'
         ];
     }
 }

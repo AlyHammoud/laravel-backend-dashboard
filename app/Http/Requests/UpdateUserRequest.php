@@ -28,6 +28,7 @@ class UpdateUserRequest extends FormRequest
      */
     public function rules()
     {
+
         return [
             'name' => 'sometimes|required|string',
             'email' => "sometimes|required|unique:users,email,{$this->user->id},id|email",
@@ -35,7 +36,10 @@ class UpdateUserRequest extends FormRequest
             'password' => 'sometimes|min:3|max:18|confirmed',
             'role_id' => 'sometimes|exists:roles,id',
             'image' => 'sometimes|nullable|image',
-            'mobile' => 'sometimes|nullable|unique:users,mobile'
+            // 'mobile' => 'sometimes|nullable|numeric|unique:users,mobile'
+
+            'mobile' => 'sometimes|nullable|numeric|unique:users,mobile,' . $this->user->id,
+            'deleteImage' => 'max:1|boolean'
         ];
     }
 }

@@ -34,14 +34,15 @@ class UpdateCategoryRequest extends FormRequest
             'name_translation.*' => "distinct|required",
             'description_translation' => "sometimes|required|array|min:1",
             'description_translation.*' => "distinct|required",
-            'image_url' => 'nullable|sometimes' // |image|max:1024|mimes:png,jpg,gif,svg,jpeg
+            'image_url' => 'nullable|sometimes|image' // |image|max:1024|mimes:png,jpg,gif,svg,jpeg
         ];
     }
 
     public function messages()
     {
         return [
-            "name_translation.en" => "Name field is required"
+            "name_translation.en" => "Name field is required",
+            'image_url' => 'invalid image type'
         ];
     }
 }

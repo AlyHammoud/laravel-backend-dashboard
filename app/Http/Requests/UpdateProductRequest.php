@@ -32,7 +32,7 @@ class UpdateProductRequest extends FormRequest
             'name_translation.*' => "distinct|required",
             'description_translation' => "sometimes|required|array|min:1",
             'description_translation.*' => "distinct",
-            'price' => 'nullable|numeric|min:0.1',
+            'price' => 'numeric|min:0.01',
             'is_available' => 'sometimes|required|boolean|max:1',
             'item_id' => 'sometimes|required|exists:items,id',
             'images' => 'sometimes|nullable|array',
@@ -51,7 +51,8 @@ class UpdateProductRequest extends FormRequest
     public function messages()
     {
         return [
-            'name_translation.en' => 'Name is required'
+            'name_translation.en' => 'Name is required',
+            'images.0' => 'image field only accepts images'
         ];
     }
 }
