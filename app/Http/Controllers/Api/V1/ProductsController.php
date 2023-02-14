@@ -75,6 +75,11 @@ class ProductsController extends Controller
             ->get();
     }
 
+    public function getMaxPrice()
+    {
+        return Product::max('price');
+    }
+
     public function productsByItem($item_id)
     {
         $search = strtolower(request()->query('search', ''));
