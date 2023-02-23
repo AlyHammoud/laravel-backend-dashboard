@@ -21,10 +21,7 @@ class ProductResource extends JsonResource
             'name' => $this->name,
             'description' => $this->description,
             'created_at' => $this->created_at->diffForHumans(),
-            'is_available' => $this->when(
-                request()->route()->named(['product.allProducts', 'product.singleproduct', 'product.allProductsByItem', 'product.allFilteredProducts']),
-                $this->is_available
-            ),
+            'is_available' => $this->is_available,
             'translations' => $this->when(
                 request()->route()->named(['product.allProducts', 'product.singleproduct', 'product.allProductsByItem']),
                 $this->translations

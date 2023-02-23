@@ -57,6 +57,7 @@ class SiteDataController extends Controller
             Product::join('laravisits', 'products.id', '=', 'laravisits.visitable_id')
             ->where('laravisits.visitable_type', 'App\Models\Product')
             ->select(DB::raw('COUNT(products.id) as count'), 'products.*')
+            // ->groupBy('products.id', 'products.is_available', 'products.price', 'item_id', 'products.created_at', 'products.updated_at')
             ->groupBy('products.id')
             ->orderBy(DB::raw('COUNT(products.id)'), 'desc')
             ->limit(4)
