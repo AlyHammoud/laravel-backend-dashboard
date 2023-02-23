@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\V1\ProductResource;
 use App\Models\Product;
 use App\Models\SiteData;
 use App\Models\User;
-use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -16,7 +17,7 @@ class SiteDataController extends Controller
     {
         $site_data = SiteData::get();
         //$site_data[0]->visit()->hourlyIntervals()->withIp();
-	$site_data[0]->visit()->customInterval(Carbon::now()->subSeconds(300))->withIp();
+        $site_data[0]->visit()->customInterval(Carbon::now()->subSeconds(300))->withIp();
     }
 
     public function getAllSiteData()
@@ -33,8 +34,12 @@ class SiteDataController extends Controller
                 return Carbon::parse($val->created_at)->format('M');
             });
 
-        $distinct_years_of_visits =
-            DB::table('laravisits')->whereNotNull('created_at')->distinct()->get([DB::raw('YEAR(created_at) as year')]);
+
+        // only get available yeard
+        $distinct_years_of_visits = DB::table('laravisits')
+            ->whereNotNull('created_at')
+            ->distinct()
+            ->get([DB::raw('YEAR(created_at) as year')]);
 
         $products_sum = Product::sum('price');
 
@@ -48,6 +53,14 @@ class SiteDataController extends Controller
 
         $count_users = User::count();
 
+        $top_product_visits_ids_count =
+            Product::join('laravisits', 'products.id', '=', 'laravisits.visitable_id')
+            ->where('laravisits.visitable_type', 'App\Models\Product')
+            ->select(DB::raw('COUNT(products.id) as count'), 'products.*')
+            ->groupBy('products.id')
+            ->orderBy(DB::raw('COUNT(products.id)'), 'desc')
+            ->limit(4)
+            ->get();
 
 
         return [
@@ -58,7 +71,8 @@ class SiteDataController extends Controller
             'countOfUsers' => $count_users,
             'years_of_visits' => $distinct_years_of_visits,
             'products_add_per_month' => $products_added_per_month,
-            'test' => $site_data[0]->popularAllTime()->get()
+            // 'test' => $site_data[0]->popularAllTime()->get(),
+            'most_visited_products' =>   ProductResource::collection($top_product_visits_ids_count)
         ];
     }
 }

@@ -39,7 +39,12 @@ class ProductResource extends JsonResource
             'quantity' => $this->productInfos->quantity,
             'color' => json_decode($this->productInfos->color),
             'size' => json_decode($this->productInfos->size),
-            'final_price' => $this->price - ($this->price * ($this->productInfos->sale / 100))
+            'final_price' => $this->price - ($this->price * ($this->productInfos->sale / 100)),
+
+            'count' => $this->when(
+                request()->route()->named(['getAllSiteData']),
+                $this->count
+            )
         ];
     }
 }

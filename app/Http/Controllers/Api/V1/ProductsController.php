@@ -7,6 +7,7 @@ use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Http\Resources\V1\ProductResource;
 use App\Models\Product;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
@@ -201,7 +202,7 @@ class ProductsController extends Controller
     public function showOneForClients(Product $product)
     {
         if ($product->is_available) {
-            $product->visit()->withIp();
+            $product->visit()->customInterval(Carbon::now()->subSeconds(1))->withIp();
             return new ProductResource($product);
         }
 

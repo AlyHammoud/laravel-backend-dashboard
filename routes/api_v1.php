@@ -35,7 +35,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     //
     //Site Data
     //
-    Route::get('/getAllSiteData', [SiteDataController::class, 'getAllSiteData']);
+    Route::get('/getAllSiteData', [SiteDataController::class, 'getAllSiteData'])->name('getAllSiteData');
     //
     //Site Data
     //
