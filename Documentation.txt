@@ -111,3 +111,4 @@
     7. be sure to verify the email after new registered user
     8. now all the endpoints can be tested one by one 
             
+..... test
