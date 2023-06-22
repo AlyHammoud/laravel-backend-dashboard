@@ -40,7 +40,12 @@ class ItemResource extends JsonResource
                     'item.allItems',
                     'item.allFilteredItems',
                     'product.allProducts',
-                    'product.allFilteredProducts'
+                    'product.allFilteredProducts',
+                    'siteData.mostViewedProducts',
+                    'products.newest',
+                    'siteData.mostViewedProductsByCategory',
+                    'all-advert',
+		    'single-advert'
                 ]
             ), $this->category)
         ];

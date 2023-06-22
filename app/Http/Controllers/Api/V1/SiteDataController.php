@@ -7,7 +7,7 @@ use App\Http\Resources\V1\ProductResource;
 use App\Models\Product;
 use App\Models\SiteData;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Builder;
+use App\Models\Category;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -18,6 +18,57 @@ class SiteDataController extends Controller
         $site_data = SiteData::get();
         //$site_data[0]->visit()->hourlyIntervals()->withIp();
         $site_data[0]->visit()->customInterval(Carbon::now()->subSeconds(300))->withIp();
+    }
+
+    public function getMostViewedProducts()
+    {
+        $top_product_visits_ids_count =
+            Product::join('laravisits', 'products.id', '=', 'laravisits.visitable_id')
+            ->join('items', 'products.item_id', '=', 'items.id')
+            ->join('categories', 'items.category_id', '=', 'categories.id')
+            ->where('items.is_available', 1)
+            ->where('categories.is_available', 1)
+            ->where('laravisits.visitable_type', 'App\Models\Product')
+            ->select(DB::raw('COUNT(products.id) as count'), 'products.*')
+            ->where('products.is_available', '1')
+            ->groupBy('products.id', 'products.is_available', 'products.price', 'item_id', 'products.created_at', 'products.updated_at')
+            // ->groupBy('products.id') // use when config/database.php mysql mode [allaw group by one column]
+            ->orderBy(DB::raw('COUNT(products.id)'), 'desc')
+            ->limit(6)
+            ->get();
+
+        return  ProductResource::collection($top_product_visits_ids_count);
+    }
+
+    public function getMostViewedProductsByCategory()
+    {
+        $cat = request()->query('cat', '');
+
+        if ($cat) {
+            $product = Category::with('products')->where('id', $cat)->get();
+            $prds = $product[0]['products']->pluck('id');
+            $top_product_visits_ids_count =
+                Product::join('laravisits', 'products.id', '=', 'laravisits.visitable_id')
+                ->join('items', 'products.item_id', '=', 'items.id')
+                ->join('categories', 'items.category_id', '=', 'categories.id')
+                ->where('items.is_available', 1)
+                ->where('categories.is_available', 1)
+                ->where('laravisits.visitable_type', 'App\Models\Product')
+                ->select(DB::raw('COUNT(products.id) as count'), 'products.*')
+                ->where('products.is_available', '1')
+                ->groupBy('products.id', 'products.is_available', 'products.price', 'item_id', 'products.created_at', 'products.updated_at')
+                ->whereIn('products.id', $prds)
+                // ->groupBy('products.id') // use when config/database.php mysql mode [allaw group by one column]
+                ->orderBy(DB::raw('COUNT(products.id)'), 'desc')
+                ->limit(6)
+                ->get();
+
+
+            //->where('item.category.id', $cat)
+            return  ProductResource::collection($top_product_visits_ids_count);
+        }
+
+        abort(404, 'page not found');
     }
 
     public function getAllSiteData()
@@ -56,7 +107,12 @@ class SiteDataController extends Controller
         $top_product_visits_ids_count =
             Product::join('laravisits', 'products.id', '=', 'laravisits.visitable_id')
             ->where('laravisits.visitable_type', 'App\Models\Product')
+            ->join('items', 'products.item_id', '=', 'items.id')
+            ->join('categories', 'items.category_id', '=', 'categories.id')
+            ->where('items.is_available', 1)
+            ->where('categories.is_available', 1)
             ->select(DB::raw('COUNT(products.id) as count'), 'products.*')
+            ->where('products.is_available', '1')
             ->groupBy('products.id', 'products.is_available', 'products.price', 'item_id', 'products.created_at', 'products.updated_at')
             // ->groupBy('products.id') // use when config/database.php mysql mode [allaw group by one column]
             ->orderBy(DB::raw('COUNT(products.id)'), 'desc')

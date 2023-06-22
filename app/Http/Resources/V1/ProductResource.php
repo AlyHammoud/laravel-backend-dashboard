@@ -28,7 +28,7 @@ class ProductResource extends JsonResource
             ),
             'managed_by' => $this->item->category->user_id,
             'item' => $this->when(
-                request()->route()->named(['product.allProducts', 'product.allFilteredProducts']),
+                request()->route()->named(['product.allProducts', 'product.allFilteredProducts','siteData.mostViewedProducts', 'products.newest','siteData.mostViewedProductsByCategory', 'all-advert', 'single-advert']),
                 new ItemResource($this->item)
             ),
 

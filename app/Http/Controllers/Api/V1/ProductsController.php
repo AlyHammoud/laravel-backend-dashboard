@@ -98,10 +98,17 @@ class ProductsController extends Controller
 
     public function productsByItemforClient($item_id)
     {
-        return ProductResource::collection(Product::with('productImages')
+        $search = request()->query('search', '');
+
+        $query = Product::with('productImages')
             ->where('item_id', $item_id)
-            ->where('is_available', 1)
-            ->paginate(20));
+            ->where('is_available', 1);
+
+        if ($search) {
+            $query = $query->whereTranslationLike('name', '%' . $search . '%');
+        }
+        return
+            ProductResource::collection($query->paginate(20));
     }
 
     public function allAvailable()
@@ -317,5 +324,20 @@ class ProductsController extends Controller
         }
 
         return response(['success' => true]);
+    }
+
+    public function newestProducts()
+    {
+        return ProductResource::collection(Product::with('productImages', 'item')
+            ->where("is_available", 1)
+            ->whereHas('item', function ($query) {
+                $query->where('is_available', 1);
+            })
+            ->whereHas('item.category', function ($query) {
+                $query->where('is_available', 1);
+            })
+            ->orderBy('created_at', 'desc')
+            ->limit(2)
+            ->get());
     }
 }
